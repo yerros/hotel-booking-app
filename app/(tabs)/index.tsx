@@ -91,7 +91,7 @@ export default function HomeScreen() {
                     <Text className="text-gray-500">{hotel.city}</Text>
                     <View className="flex-row justify-between items-center mt-2">
                       <Text className="text-blue-500 font-semibold">
-                        Rp {hotel.price.toLocaleString('id-ID')}/night
+                        ${(hotel.price / 15000).toFixed(0)}/night
                       </Text>
                       <View className="flex-row items-center">
                         <Text className="text-yellow-500 mr-1">★</Text>

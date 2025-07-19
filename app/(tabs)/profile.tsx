@@ -2,21 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
 import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-
-type MenuAction = 'profile' | 'bookings' | 'payments' | 'notifications' | 'settings' | 'support';
-
-interface MenuItem {
-  icon: keyof typeof Ionicons.glyphMap;
-  label: string;
-  action: MenuAction;
-}
-
-interface UserData {
-  name: string;
-  email: string;
-  phone: string;
-  joinDate: string;
-}
+import { MenuAction, MenuItem, UserData } from '@/types';
 
 const MENU_ITEMS: MenuItem[] = [
   { icon: 'person-outline', label: 'Personal Information', action: 'profile' },

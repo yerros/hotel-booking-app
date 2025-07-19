@@ -2,18 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-
-interface BookingItem {
-  id: string;
-  hotelName: string;
-  location: string;
-  checkIn: string;
-  checkOut: string;
-  guests: number;
-  totalPrice: number;
-  status: 'confirmed' | 'pending' | 'cancelled' | 'completed';
-  bookingDate: string;
-}
+import { BookingItem } from '@/types';
 
 const BOOKING_HISTORY: BookingItem[] = [
   {
@@ -80,13 +69,13 @@ const getStatusColor = (status: BookingItem['status']) => {
 const getStatusText = (status: BookingItem['status']) => {
   switch (status) {
     case 'confirmed':
-      return 'Dikonfirmasi';
+      return 'Confirmed';
     case 'pending':
-      return 'Menunggu';
+      return 'Pending';
     case 'cancelled':
-      return 'Dibatalkan';
+      return 'Cancelled';
     case 'completed':
-      return 'Selesai';
+      return 'Completed';
     default:
       return status;
   }
@@ -144,8 +133,8 @@ export default function BookingsScreen() {
         <View className="flex-row justify-between">
           <View className="flex-1 items-start">
             <Ionicons name="people-outline" size={16} color="#6B7280" />
-            <Text className="text-xs text-gray-500 mt-1 mb-0.5">Tamu</Text>
-            <Text className="text-sm text-gray-900 font-medium">{booking.guests} orang</Text>
+            <Text className="text-xs text-gray-500 mt-1 mb-0.5">Guests</Text>
+            <Text className="text-sm text-gray-900 font-medium">{booking.guests} people</Text>
           </View>
           <View className="flex-1 items-start">
             <Ionicons name="card-outline" size={16} color="#6B7280" />
@@ -157,11 +146,11 @@ export default function BookingsScreen() {
       
       <View className="flex-row justify-between items-center pt-4 border-t border-gray-200">
         <Text className="text-xs text-gray-500">
-          Dipesan pada {formatDate(booking.bookingDate)}
+          Booked on {formatDate(booking.bookingDate)}
         </Text>
         <Link href={`/booking/${booking.id}`} asChild>
           <TouchableOpacity className="flex-row items-center">
-            <Text className="text-sm text-blue-500 font-medium mr-1">Lihat Detail</Text>
+            <Text className="text-sm text-blue-500 font-medium mr-1">View Details</Text>
             <Ionicons name="chevron-forward" size={16} color="#3B82F6" />
           </TouchableOpacity>
         </Link>
@@ -172,22 +161,22 @@ export default function BookingsScreen() {
   return (
     <ScrollView className="flex-1 bg-gray-50">
       <View className="p-5 pt-15 bg-white">
-        <Text className="text-3xl font-bold text-gray-900 mb-1">Riwayat Booking</Text>
-        <Text className="text-base text-gray-500">Kelola dan lihat semua pemesanan Anda</Text>
+        <Text className="text-3xl font-bold text-gray-900 mb-1">Booking History</Text>
+        <Text className="text-base text-gray-500">Manage and view all your reservations</Text>
       </View>
       
       <View className="flex-row px-5 py-4 bg-white border-b border-gray-200">
         <TouchableOpacity className="px-4 py-2 rounded-full mr-3 bg-blue-500">
-          <Text className="text-sm text-white font-medium">Semua</Text>
+          <Text className="text-sm text-white font-medium">All</Text>
         </TouchableOpacity>
         <TouchableOpacity className="px-4 py-2 rounded-full mr-3 bg-gray-100">
-          <Text className="text-sm text-gray-500 font-medium">Dikonfirmasi</Text>
+          <Text className="text-sm text-gray-500 font-medium">Confirmed</Text>
         </TouchableOpacity>
         <TouchableOpacity className="px-4 py-2 rounded-full mr-3 bg-gray-100">
-          <Text className="text-sm text-gray-500 font-medium">Menunggu</Text>
+          <Text className="text-sm text-gray-500 font-medium">Pending</Text>
         </TouchableOpacity>
         <TouchableOpacity className="px-4 py-2 rounded-full mr-3 bg-gray-100">
-          <Text className="text-sm text-gray-500 font-medium">Selesai</Text>
+          <Text className="text-sm text-gray-500 font-medium">Completed</Text>
         </TouchableOpacity>
       </View>
       

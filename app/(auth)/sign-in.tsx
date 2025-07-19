@@ -4,12 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-interface SocialLogin {
-  id: string;
-  name: string;
-  icon: keyof typeof Ionicons.glyphMap;
-}
+import { SocialLogin } from '@/types';
 
 const SOCIAL_LOGINS: SocialLogin[] = [
   { id: 'google', name: 'Google', icon: 'logo-google' },

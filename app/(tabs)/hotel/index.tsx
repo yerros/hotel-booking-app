@@ -2,23 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import React, { useState } from 'react';
 import { FlatList, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-interface Hotel {
-  id: string;
-  name: string;
-  location: string;
-  rating: number;
-  price: number;
-  image: string;
-  amenities: string[];
-  description: string;
-  category: 'luxury' | 'business' | 'budget' | 'resort';
-  distance: number;
-}
-
-interface RenderHotelCardProps {
-  item: Hotel;
-}
+import { Hotel, RenderHotelCardProps } from '@/types';
 
 const HOTELS: Hotel[] = [
   {
@@ -29,7 +13,7 @@ const HOTELS: Hotel[] = [
     price: 500000,
     image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400',
     amenities: ['WiFi', 'Pool', 'Gym', 'Restaurant'],
-    description: 'Hotel mewah di pusat kota Jakarta dengan fasilitas lengkap',
+    description: 'Luxury hotel in the heart of Jakarta with complete facilities',
     category: 'luxury',
     distance: 2.5
   },
@@ -41,7 +25,7 @@ const HOTELS: Hotel[] = [
     price: 800000,
     image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400',
     amenities: ['WiFi', 'Beach', 'Spa', 'Restaurant'],
-    description: 'Resort tepi pantai dengan pemandangan laut yang menakjubkan',
+    description: 'Beachfront resort with stunning ocean views',
     category: 'resort',
     distance: 15.2
   },
@@ -53,7 +37,7 @@ const HOTELS: Hotel[] = [
     price: 350000,
     image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400',
     amenities: ['WiFi', 'Meeting Room', 'Gym', 'Restaurant'],
-    description: 'Hotel bisnis modern dengan fasilitas meeting lengkap',
+    description: 'Modern business hotel with complete meeting facilities',
     category: 'business',
     distance: 5.8
   },
@@ -65,7 +49,7 @@ const HOTELS: Hotel[] = [
     price: 200000,
     image: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400',
     amenities: ['WiFi', 'Parking', 'Restaurant'],
-    description: 'Hotel budget dengan lokasi strategis dan fasilitas memadai',
+    description: 'Budget hotel with strategic location and adequate facilities',
     category: 'budget',
     distance: 8.1
   },
@@ -77,7 +61,7 @@ const HOTELS: Hotel[] = [
     price: 450000,
     image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400',
     amenities: ['WiFi', 'Mountain View', 'Restaurant', 'Spa'],
-    description: 'Lodge dengan pemandangan gunung yang indah dan udara sejuk',
+    description: 'Lodge with beautiful mountain views and cool air',
     category: 'resort',
     distance: 12.3
   },
@@ -89,16 +73,16 @@ const HOTELS: Hotel[] = [
     price: 300000,
     image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400',
     amenities: ['WiFi', 'Pool', 'Restaurant', 'Parking'],
-    description: 'Hotel di pusat kota dengan akses mudah ke berbagai tempat',
+    description: 'Hotel in the city center with easy access to various places',
     category: 'business',
     distance: 1.2
   }
 ];
 
 const CATEGORIES = [
-  { id: 'all', name: 'Semua', icon: 'apps-outline' },
-  { id: 'luxury', name: 'Mewah', icon: 'diamond-outline' },
-  { id: 'business', name: 'Bisnis', icon: 'briefcase-outline' },
+  { id: 'all', name: 'All', icon: 'apps-outline' },
+  { id: 'luxury', name: 'Luxury', icon: 'diamond-outline' },
+  { id: 'business', name: 'Business', icon: 'briefcase-outline' },
   { id: 'budget', name: 'Budget', icon: 'wallet-outline' },
   { id: 'resort', name: 'Resort', icon: 'sunny-outline' }
 ];
@@ -192,9 +176,9 @@ export default function HotelsScreen() {
           </View>
           
           <View className="flex-row items-baseline">
-            <Text className="text-xs text-gray-500 mr-1.5">Mulai dari</Text>
+            <Text className="text-xs text-gray-500 mr-1.5">Starting from</Text>
             <Text className="text-lg font-bold text-green-600">{formatCurrency(item.price)}</Text>
-            <Text className="text-xs text-gray-500 ml-0.5">/malam</Text>
+            <Text className="text-xs text-gray-500 ml-0.5">/night</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -205,8 +189,8 @@ export default function HotelsScreen() {
     <View className="flex-1 bg-gray-50">
       {/* Header */}
       <View className="p-5 pt-15 bg-white">
-        <Text className="text-3xl font-bold text-gray-900 mb-1">Hotel</Text>
-        <Text className="text-base text-gray-500">Temukan hotel terbaik untuk Anda</Text>
+        <Text className="text-3xl font-bold text-gray-900 mb-1">Hotels</Text>
+        <Text className="text-base text-gray-500">Find the best hotels for you</Text>
       </View>
       
       {/* Search Bar */}
@@ -215,7 +199,7 @@ export default function HotelsScreen() {
           <Ionicons name="search-outline" size={20} color="#6B7280" />
           <TextInput
             className="flex-1 ml-3 text-base text-gray-900"
-            placeholder="Cari hotel atau lokasi..."
+            placeholder="Search hotels or locations..."
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholderTextColor="#9CA3AF"
@@ -258,12 +242,12 @@ export default function HotelsScreen() {
       
       {/* Sort Options */}
       <View className="flex-row items-center px-5 py-3 bg-white border-b border-gray-200">
-        <Text className="text-sm text-gray-500 mr-3">Urutkan:</Text>
+        <Text className="text-sm text-gray-500 mr-3">Sort by:</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {[
             { key: 'rating', label: 'Rating' },
-            { key: 'price', label: 'Harga' },
-            { key: 'distance', label: 'Jarak' }
+            { key: 'price', label: 'Price' },
+            { key: 'distance', label: 'Distance' }
           ].map((option) => (
             <TouchableOpacity
               key={option.key}
@@ -287,7 +271,7 @@ export default function HotelsScreen() {
       {/* Results Count */}
       <View className="px-5 py-3 bg-gray-50">
         <Text className="text-sm text-gray-500">
-          {filteredHotels.length} hotel ditemukan
+          {filteredHotels.length} hotels found
         </Text>
       </View>
       

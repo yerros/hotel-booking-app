@@ -2,22 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import React, { useState } from 'react';
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ExploreHotel, RenderExploreHotelCardProps } from '@/types';
 
-interface Hotel {
-  id: number;
-  name: string;
-  city: string;
-  price: number;
-  rating: number;
-  image: string;
-  description: string;
-}
-
-interface RenderHotelCardProps {
-  item: Hotel;
-}
-
-const HOTELS: Hotel[] = [
+const HOTELS: ExploreHotel[] = [
   {
     id: 1,
     name: 'Grand Hotel Plaza',
@@ -50,7 +37,7 @@ const HOTELS: Hotel[] = [
 export default function ExploreScreen() {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const renderHotelCard = ({ item: hotel }: RenderHotelCardProps) => (
+  const renderHotelCard = ({ item: hotel }: RenderExploreHotelCardProps) => (
     <Link href={`/(tabs)/hotel/${hotel.id}` as const} asChild>
       <TouchableOpacity className="bg-white rounded-xl overflow-hidden shadow-md mb-4">
         <Image
@@ -78,7 +65,7 @@ export default function ExploreScreen() {
           
           <View className="flex-row justify-between items-center mt-3">
             <Text className="text-blue-500 font-semibold text-lg">
-              Rp {hotel.price.toLocaleString('id-ID')}
+              ${(hotel.price / 15000).toFixed(0)}
             </Text>
             <Text className="text-gray-500">/night</Text>
           </View>
@@ -106,7 +93,7 @@ export default function ExploreScreen() {
         </View>
       </View>
 
-      <FlatList<Hotel>
+      <FlatList<ExploreHotel>
         data={filteredHotels}
         renderItem={renderHotelCard}
         keyExtractor={(hotel) => hotel.id.toString()}

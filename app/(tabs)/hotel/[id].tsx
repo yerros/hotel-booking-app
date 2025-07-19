@@ -2,35 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-
-interface Room {
-  id: number;
-  type: string;
-  price: number;
-  description: string;
-  capacity: string;
-}
-
-interface Amenity {
-  icon: keyof typeof Ionicons.glyphMap;
-  name: string;
-}
-
-interface HotelDetail {
-  id: number;
-  name: string;
-  city: string;
-  address: string;
-  rating: number;
-  description: string;
-  images: string[];
-  rooms: Room[];
-  amenities: Amenity[];
-}
-
-type HotelDetails = {
-  [key: number]: HotelDetail;
-};
+import { Room, Amenity, HotelDetail, HotelDetails } from '@/types';
 
 const HOTEL_DETAILS: HotelDetails = {
   1: {
@@ -159,7 +131,7 @@ export default function HotelDetailScreen() {
                 <Text className="text-gray-500 mt-1">{room.capacity}</Text>
               </View>
               <Text className="text-blue-500 font-semibold">
-                Rp {room.price.toLocaleString('id-ID')}
+                ${(room.price / 15000).toFixed(0)}
               </Text>
             </View>
             <Text className="text-gray-600 mt-2">{room.description}</Text>
