@@ -10,22 +10,22 @@ const slides = [
     key: 'one',
     title: 'Welcome to StayEasy',
     text: 'Find and book the best hotels with just a few taps.',
-    image: require('@/assets/images/splash-icon.png'),
-    bg: '#F6F8FB'
+    image: require('@/assets/images/travel-booking.png'),
+    bg: '#FFFFFF'
   },
   {
     key: 'two',
     title: 'Explore Destinations',
     text: 'Discover new places and exclusive deals for your next trip.',
-    image: require('@/assets/images/partial-react-logo.png'),
-    bg: '#F6F8FB'
+    image: require('@/assets/images/tourist-map.png'),
+    bg: '#FFFFFF'
   },
   {
     key: 'three',
     title: 'Book Instantly',
     text: 'Seamless booking experience, secure and fast.',
-    image: require('@/assets/images/travel-booking.png'),
-    bg: '#F6F8FB'
+    image: require('@/assets/images/booking.png'),
+    bg: '#FFFFFF'
   }
 ];
 

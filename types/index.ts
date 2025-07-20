@@ -149,3 +149,11 @@ export interface IconSymbolProps {
   style?: import('react-native').StyleProp<import('react-native').TextStyle>;
   weight?: import('expo-symbols').SymbolWeight;
 }
+
+export interface Customer {
+  id: number;
+  full_name: string;
+  email: string;
+  phone: string;
+  profile_image_url: string;
+}

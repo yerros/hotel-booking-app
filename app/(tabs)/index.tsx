@@ -29,6 +29,12 @@ export default function HomeScreen() {
   const [showCheckIn, setShowCheckIn] = useState(false);
   const [showCheckOut, setShowCheckOut] = useState(false);
 
+
+
+  // if (!user) {
+  //   return <Redirect href="/(tabs)" />;
+  // }
+
   return (
     <SafeAreaView className='flex-1'>
       <ScrollView className="flex-1 bg-gray-50">

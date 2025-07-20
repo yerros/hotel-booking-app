@@ -1,8 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import React from 'react';
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+
 import { MenuAction, MenuItem, UserData } from '@/types';
+import React from 'react';
+import { Alert, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 const MENU_ITEMS: MenuItem[] = [
   { icon: 'person-outline', label: 'Personal Information', action: 'profile' },
@@ -21,6 +24,8 @@ const USER_DATA: UserData = {
 };
 
 export default function ProfileScreen() {
+  const queryClient = useQueryClient();
+
   const handleMenuPress = (action: MenuAction) => {
     // Handle menu item press
     Alert.alert('Coming Soon', `${action} feature will be available soon!`);
@@ -34,7 +39,10 @@ export default function ProfileScreen() {
         { text: 'Cancel', style: 'cancel' },
         { 
           text: 'Logout', 
-          onPress: () => router.replace('/(auth)' as const),
+          onPress: () => {
+           AsyncStorage.removeItem('token');
+            router.replace('/(auth)/sign-in' as const);
+          },
           style: 'destructive'
         },
       ]
@@ -42,7 +50,8 @@ export default function ProfileScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-gray-50">
+<SafeAreaView className="flex-1">
+      <ScrollView className="flex-1 bg-gray-50">
       {/* Profile Header */}
       <View className="bg-white p-6">
         <View className="items-center">
@@ -85,5 +94,6 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
     </ScrollView>
+</SafeAreaView>
   );
 }

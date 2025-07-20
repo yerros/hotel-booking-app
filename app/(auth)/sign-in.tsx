@@ -1,10 +1,13 @@
 
 
+import { useLogin } from '@/hooks/useAuth';
+import { SocialLogin } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useQueryClient } from '@tanstack/react-query';
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { SocialLogin } from '@/types';
 
 const SOCIAL_LOGINS: SocialLogin[] = [
   { id: 'google', name: 'Google', icon: 'logo-google' },
@@ -17,13 +20,39 @@ export default function SignInScreen() {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const handleSignIn = () => {
+  const { mutate, isPending, error } = useLogin();
+  const queryClient = useQueryClient();
+
+  const handleSignIn = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
     // Here you would typically validate credentials with your backend
-    router.replace('/(tabs)' as const);
+    await mutate({ email, password },
+      {
+        onSuccess: async (data) => {
+          try {
+            const token = data.data.token;
+            const user = data.data.customer;
+
+            await AsyncStorage.setItem('token', token); // tidak perlu JSON.stringify, karena token adalah string
+
+            // Set data user ke cache `me`
+            queryClient.setQueryData(['me'], user);
+
+            // Redirect ke tabs
+            router.replace('/(tabs)');
+          } catch (error) {
+            console.error('Failed to store token:', error);
+          }
+        },
+        onError: (error: any) => {
+          Alert.alert('Error', error?.response?.data?.message || 'Something went wrong');
+        },
+      },
+    );
+
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -34,11 +63,11 @@ export default function SignInScreen() {
     <View className="flex-1 bg-white p-6 justify-center">
       <View className="items-center mb-8">
         <Image
-          source={require('@/assets/images/travel-booking.png')}
-          className="w-32 h-32"
+          source={require('@/assets/images/logo.png')}
+          className="w-64 h-64"
           resizeMode="contain"
         />
-        <Text className="text-2xl font-bold mt-4 text-gray-800">Welcome Back!</Text>
+        <Text className="text-2xl font-bold text-gray-800">Welcome Back!</Text>
         <Text className="text-gray-600 mt-2">Sign in to continue</Text>
       </View>
 
@@ -75,7 +104,7 @@ export default function SignInScreen() {
           </View>
         </View>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={handleSignIn}
           className="bg-blue-500 rounded-xl py-4 mt-6"
         >

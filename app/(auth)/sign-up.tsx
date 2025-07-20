@@ -1,33 +1,58 @@
+import { useRegister } from '@/hooks/useAuth';
 import { Ionicons } from '@expo/vector-icons';
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function SignUpScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const { mutate, isPending, error } = useRegister();
+
   const handleSignUp = () => {
-    // if (!name || !email || !phone || !password) {
-    //   Alert.alert('Error', 'Please fill in all fields');
-    //   return;
-    // }
-    // Here you would typically create account with your backend
-    router.replace('/(tabs)');
+    mutate(
+      {
+        full_name: name,
+        email,
+        phone,
+        password,
+        password_confirmation: confirmPassword,
+      },
+      {
+        onSuccess: () => {
+          router.push('/(tabs)');
+        },
+        onError: (error: any) => {
+          if (error.response?.status === 422) {
+            const errors = error.response.data.errors;
+            const firstField = Object.keys(errors)[0];
+            const firstMessage = errors[firstField][0];
+
+            // tampilkan alert atau toast
+            Alert.alert('Validation Error', firstMessage);
+          } else {
+            Alert.alert('Error', 'Something went wrong');
+          }
+
+        }
+      }
+    );
   };
 
   return (
     <View className="flex-1 bg-white p-6">
       <View className="items-center mb-8">
         <Image
-          source={require('@/assets/images/travel-booking.png')}
-          className="w-32 h-32"
+          source={require('@/assets/images/logo.png')}
+          className="w-64 h-64"
           resizeMode="contain"
         />
-        <Text className="text-2xl font-bold mt-4 text-gray-800">Create Account</Text>
+        <Text className="text-2xl font-bold text-gray-800">Create Account</Text>
         <Text className="text-gray-600 mt-2">Sign up to get started</Text>
       </View>
 
@@ -76,6 +101,13 @@ export default function SignUpScreen() {
               secureTextEntry={!showPassword}
               className="flex-1 text-base"
             />
+            <TextInput
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholder="Confirm password"
+              secureTextEntry={!showPassword}
+              className="flex-1 text-base"
+            />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
@@ -86,7 +118,7 @@ export default function SignUpScreen() {
           </View>
         </View>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={handleSignUp}
           className="bg-blue-500 rounded-xl py-4 mt-6"
         >
